@@ -8,30 +8,32 @@
    Two-product page (Rhea, Phoenix). Structure references: Samsung R20
    hero rotation, OmniTom resources cards, Miracell statement / number
    rows / contact banner. Structure only; colors and type stay DESIGN.md.
-   Dark only, per DESIGN.md ("Don't ship a light-mode marketing page").
+   Light mode (user choice, 2026-09-28): DESIGN.md's dark surface
+   ladder is inverted onto a white canvas. The lavender accent and all
+   type, spacing and radius tokens are unchanged.
    ========================================================= */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
   /* colors */
   --color-primary: #5e6ad2;
   --color-on-primary: #ffffff;
-  --color-primary-hover: #828fff;
+  --color-primary-hover: #4b55c0;
   --color-primary-focus: #5e69d1;
-  --color-ink: #f7f8f8;
-  --color-ink-muted: #d0d6e0;
-  --color-ink-subtle: #8a8f98;
-  --color-ink-tertiary: #62666d;
-  --color-canvas: #010102;
-  --color-surface-1: #0f1011;
-  --color-surface-2: #141516;
-  --color-surface-3: #18191a;
-  --color-surface-4: #191a1b;
-  --color-hairline: #23252a;
-  --color-hairline-strong: #34343a;
-  --color-hairline-tertiary: #3e3e44;
+  --color-ink: #0f1011;
+  --color-ink-muted: #3c4149;
+  --color-ink-subtle: #62666d;
+  --color-ink-tertiary: #8a8f98;
+  --color-canvas: #ffffff;
+  --color-surface-1: #f7f8f8;
+  --color-surface-2: #f0f1f3;
+  --color-surface-3: #ebecee;
+  --color-surface-4: #e6e7ea;
+  --color-hairline: #e3e5e8;
+  --color-hairline-strong: #d0d3d8;
+  --color-hairline-tertiary: #b9bdc4;
   --color-inverse-canvas: #ffffff;
-  --color-semantic-success: #27a644;
+  --color-semantic-success: #1f8a38;
 
   /* typography — Pretendard (DESIGN.md Note on Font Substitutes) */
   --font-display: "Pretendard Variable", Pretendard, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
@@ -55,8 +57,8 @@
   --spacing-xxl: 48px;
   --spacing-section: 96px;
 
-  /* "Subtle white edge highlight on the top edge of lifted panels" */
-  --edge-highlight: inset 0 1px 0 color-mix(in srgb, var(--color-inverse-canvas) 4%, transparent);
+  /* light-mode stand-in for the dark edge highlight: a faint lift shadow */
+  --edge-highlight: 0 1px 2px color-mix(in srgb, var(--color-ink) 6%, transparent);
   /* Level 4: "2px primary-focus outline at 50% opacity" */
   --focus-ring: color-mix(in srgb, var(--color-primary-focus) 50%, transparent);
 
@@ -205,9 +207,8 @@ h4 {
 }
 .btn:active { transform: scale(0.98); } /* tactile press */
 .btn-primary { background: var(--color-primary); color: var(--color-on-primary); }
-/* DESIGN.md hover fill (#828fff) with canvas text: 7.3:1, up from 4.6:1 at rest.
-   White on #828fff would drop to 2.9:1. */
-.btn-primary:hover { background: var(--color-primary-hover); color: var(--color-canvas); }
+/* light mode: hover darkens the lavender (#4b55c0) so white text rises to 6.2:1 */
+.btn-primary:hover { background: var(--color-primary-hover); color: var(--color-on-primary); }
 .btn-primary:active { background: var(--color-primary-focus); }
 
 .btn-secondary {
@@ -268,7 +269,7 @@ h4 {
   color: var(--color-ink);
 }
 .wordmark-mark { color: var(--color-primary); } /* brand mark: a documented lavender use */
-/* hover lifts the mark to the brighter DESIGN.md lavender: more contrast, not less */
+/* hover deepens the mark to the darker lavender: more contrast, not less */
 .wordmark:hover .wordmark-mark { color: var(--color-primary-hover); }
 
 .main-nav { display: none; gap: var(--spacing-lg); font-size: 14px; }
@@ -318,12 +319,13 @@ h4 {
 }
 
 /* =========================================================
-   Photo tiles — product photography is shot on white, so it sits
-   on the documented inverse-canvas as a deliberate tile.
+   Photo tiles — product photography is shot on white; on the white
+   canvas a hairline border keeps the tile edge visible.
    ========================================================= */
 .photo-tile {
   overflow: hidden;
   background: var(--color-inverse-canvas);
+  border: 1px solid var(--color-hairline);
   border-radius: var(--rounded-xl);
 }
 .photo-tile img { width: 100%; height: auto; }
@@ -555,7 +557,7 @@ h4 {
 }
 .form-row { display: flex; flex-direction: column; gap: var(--spacing-xs); }
 label { font-size: 14px; font-weight: 500; color: var(--color-ink-muted); }
-/* text-input; select gets explicit colors for Windows dark mode */
+/* text-input; select gets explicit colors so native dropdowns match */
 input, textarea, select {
   min-height: 44px;
   padding: 8px 12px;
