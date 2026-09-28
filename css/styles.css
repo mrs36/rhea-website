@@ -1,269 +1,282 @@
 /* =========================================================
-   RHEA — design tokens
-   System: Apple-style product tiles (see DESIGN.md).
-   Full-bleed sections alternate white / parchment / near-black and
-   the color change is the divider. One Action Blue carries every
-   interactive element and nothing else. No decorative borders or
-   shadows — the single product shadow sits under the rotor render.
+   RHEA — landing page
+   Every color, font, spacing, radius and button value below is
+   taken from DESIGN.md (Linear-design-analysis). Nothing outside
+   its tokens is introduced; where DESIGN.md is silent (e.g. form
+   errors — see its Known Gaps) the page reuses existing tokens.
+
+   Two-product page (Rhea, Phoenix). Structure references: Samsung R20
+   hero rotation, OmniTom resources cards, Miracell statement / number
+   rows / contact banner. Structure only; colors and type stay DESIGN.md.
+   Light mode (user choice, 2026-09-28): DESIGN.md's dark surface
+   ladder is inverted onto a white canvas. The lavender accent and all
+   type, spacing and radius tokens are unchanged.
    ========================================================= */
 :root {
   color-scheme: light;
 
-  /* color — action */
-  --color-primary: #0066cc;
-  --color-primary-focus: #0071e3;
-  --color-primary-on-dark: #2997ff;
+  /* colors */
+  --color-primary: #5e6ad2;
   --color-on-primary: #ffffff;
-
-  /* color — text */
-  --color-ink: #1d1d1f;
-  --color-ink-muted-80: #333333;
-  /* DESIGN.md's ink-muted-48 (#7a7a7a) is ~4.3:1 on white — just under AA
-     for body-size text, and it backs the "사양 확정 예정" markers that carry
-     real meaning. #6e6e73 (Apple's own secondary label gray) clears 5:1. */
-  --color-ink-secondary: #6e6e73;
-  --color-on-dark: #ffffff;
-  --color-body-muted: #cccccc;
-
-  /* color — surfaces */
+  --color-primary-hover: #4b55c0;
+  --color-primary-focus: #5e69d1;
+  --color-ink: #0f1011;
+  --color-ink-muted: #3c4149;
+  --color-ink-subtle: #62666d;
+  --color-ink-tertiary: #8a8f98;
   --color-canvas: #ffffff;
-  --color-parchment: #f5f5f7;
-  --color-pearl: #fafafc;
-  --color-tile-1: #272729;
-  --color-tile-2: #2a2a2c;
-  --color-tile-3: #252527;
-  --color-black: #000000;
+  --color-surface-1: #f7f8f8;
+  --color-surface-2: #f0f1f3;
+  --color-surface-3: #ebecee;
+  --color-surface-4: #e6e7ea;
+  --color-hairline: #e3e5e8;
+  --color-hairline-strong: #d0d3d8;
+  --color-hairline-tertiary: #b9bdc4;
+  --color-inverse-canvas: #ffffff;
+  --color-semantic-success: #1f8a38;
 
-  /* color — lines */
-  --color-divider-soft: #f0f0f0;
-  --color-hairline: #e0e0e0;
-  --color-field-border: #d2d2d7;
-  --color-hairline-on-dark: rgba(255, 255, 255, 0.12);
+  /* typography — Pretendard (DESIGN.md Note on Font Substitutes) */
+  --font-display: "Pretendard Variable", Pretendard, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-text: "Pretendard Variable", Pretendard, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
 
-  /* DESIGN.md surfaces no error state (Known Gaps); Apple's system red. */
-  --color-error: #e30000;
-  --color-success: #248a3d;
+  /* rounded */
+  --rounded-xs: 4px;
+  --rounded-sm: 6px;
+  --rounded-md: 8px;
+  --rounded-lg: 12px;
+  --rounded-xl: 16px;
+  --rounded-pill: 9999px;
 
-  /* type — system-ui resolves to SF Pro (and Apple SD Gothic Neo for
-     Hangul) on Apple devices; Pretendard covers Hangul elsewhere. */
-  --font-sans: -apple-system, BlinkMacSystemFont, system-ui, "Pretendard Variable", "Pretendard", "Segoe UI", "Malgun Gothic", sans-serif;
+  /* spacing */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 96px;
 
-  /* shape */
-  --radius-sm: 8px;    /* compact utility */
-  --radius-md: 11px;   /* pearl capsule, form fields */
-  --radius-lg: 18px;   /* utility cards */
-  --radius-pill: 9999px; /* every action */
+  /* light-mode stand-in for the dark edge highlight: a faint lift shadow */
+  --edge-highlight: 0 1px 2px color-mix(in srgb, var(--color-ink) 6%, transparent);
+  /* Level 4: "2px primary-focus outline at 50% opacity" */
+  --focus-ring: color-mix(in srgb, var(--color-primary-focus) 50%, transparent);
 
-  /* the one shadow in the system — product renders only */
-  --shadow-product: 3px 5px 30px rgba(0, 0, 0, 0.22);
-
-  /* layout */
-  --container: 1068px;
-  --container-text: 980px;
-  --gutter: clamp(1rem, 4vw, 1.5rem);
-  --section: clamp(3rem, 8vw, 5rem); /* 80px desktop → 48px small phone */
-
-  /* motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 160ms;
-  --dur-med: 420ms;
+
+  --container: 1280px;
+  --gutter: var(--spacing-md);
+  --section-space: var(--spacing-xxl);
+}
+@media (min-width: 768px) {
+  :root {
+    --gutter: var(--spacing-xl);
+    --section-space: var(--spacing-section);
+  }
 }
 
 /* =========================================================
-   Reset
+   Base
    ========================================================= */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+/* 56px sticky top-nav + a 16px breath: anchor jumps and Tab focus land below it */
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(56px + var(--spacing-md)); }
+main [id] { scroll-margin-top: calc(56px + var(--spacing-md)); }
+a, button, input, textarea, label { touch-action: manipulation; }
+/* no grey flash on tap; :active and :focus-visible states give the feedback */
+a, button { -webkit-tap-highlight-color: transparent; }
 body {
   margin: 0;
   background: var(--color-canvas);
   color: var(--color-ink);
-  font-family: var(--font-sans);
-  font-size: 17px;          /* Apple runs body at 17px, not 16px */
-  line-height: 1.47;
-  letter-spacing: -0.01em;
+  /* typography.body */
+  font-family: var(--font-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  word-break: keep-all; /* Hangul wraps at word boundaries, not mid-word */
+  word-break: keep-all; /* Hangul wraps at word boundaries */
   overflow-wrap: anywhere;
 }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; }
-ul, ol { margin: 0; padding: 0; list-style: none; }
-h1, h2, h3, p, figure { margin: 0; }
-button { font: inherit; color: inherit; }
-input, textarea, select { font: inherit; color: inherit; }
+ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, h4, p { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
 
-::selection { background: color-mix(in srgb, var(--color-primary) 22%, transparent); }
-:focus-visible {
-  outline: 2px solid var(--color-primary-focus);
-  outline-offset: 2px;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-  border: 0;
-}
+::selection { background: var(--color-primary); color: var(--color-on-primary); }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 .skip-link {
   position: absolute;
-  left: 1rem; top: -3rem;
-  background: var(--color-canvas);
-  color: var(--color-primary);
-  padding: 0.6rem 1.1rem;
-  border-radius: var(--radius-pill);
-  transition: top var(--dur-fast) var(--ease-out);
+  left: var(--spacing-md);
+  top: calc(-1 * var(--spacing-xxl));
   z-index: 100;
+  padding: 8px 14px;
+  border-radius: var(--rounded-md);
+  background: var(--color-surface-2);
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 500;
 }
-.skip-link:focus { top: 0.5rem; }
+.skip-link:focus-visible { top: var(--spacing-md); }
 
-/* =========================================================
-   Type — weights 300 / 400 / 600 / 700 only; 500 is absent
-   ========================================================= */
-h1, h2, h3 {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  color: inherit;
-}
-h1 {
-  font-size: clamp(1.75rem, 1.1rem + 2.9vw, 3.5rem); /* 28px → 56px */
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-h2 {
-  font-size: clamp(1.75rem, 1.35rem + 1.7vw, 2.5rem); /* display-lg 40px */
-  line-height: 1.12;
-  letter-spacing: -0.015em;
-}
-h3 {
-  font-size: 1.3125rem; /* tagline 21px */
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-p { color: var(--color-ink-secondary); }
-
-.section-inner {
+.container {
   max-width: var(--container);
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
 
-/* Section heads sit centered atop each tile, like a product tile's name + tagline. */
-.section-inner > h2,
-.section-inner > .section-lede { text-align: center; margin-left: auto; margin-right: auto; }
-.section-lede {
-  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.3125rem);
-  line-height: 1.38;
-  max-width: 40ch;
-  margin-top: 0.75rem;
+/* =========================================================
+   Typography scale
+   ========================================================= */
+/* display-lg in the split hero (planned together with the photo);
+   scales toward ~36px on mobile per Responsive Behavior */
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 3.9vw, 56px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.032em; /* -1.8px at 56px */
+  text-wrap: balance;
+}
+/* display-md, scaling toward headline (28px) on mobile */
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em; /* -1.0px at 40px */
+  text-wrap: balance;
+}
+/* card-title */
+h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+  text-wrap: balance;
+}
+/* body-lg for step names; set apart from the body-sm description by
+   ink vs ink-subtle color, not by an off-token weight */
+h4 {
+  font-family: var(--font-text);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.1px;
+  color: var(--color-ink);
 }
 
-.spec-table, .pending-value, .rotor-caption {
-  font-variant-numeric: tabular-nums;
+/* body-lg */
+.section-lede {
+  margin-top: var(--spacing-md);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: -0.1px;
+  color: var(--color-ink-subtle);
+  max-width: 40em;
 }
+.section-head { margin-bottom: var(--spacing-xxl); max-width: 720px; }
+
+.pending-value { color: var(--color-ink-subtle); }
 
 /* =========================================================
-   Buttons — the pill is the action signal; press = scale(0.95)
+   Buttons — button-primary / button-secondary
    ========================================================= */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 11px 22px;
-  border-radius: var(--radius-pill);
-  font-size: 17px;
-  font-weight: 400;
-  line-height: 1.18;
-  letter-spacing: -0.01em;
-  text-decoration: none;
+  min-height: 40px; /* "CTAs hold ≥40px tap height" */
+  padding: 8px 14px;
   border: 1px solid transparent;
+  border-radius: var(--rounded-md);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
-  transition: transform var(--dur-fast) var(--ease-out),
-              background-color var(--dur-fast) var(--ease-out),
-              color var(--dur-fast) var(--ease-out);
+  transition: transform 160ms var(--ease-out); /* compositor-only; colors swap instantly */
 }
-.btn:active { transform: scale(0.95); }
-.btn-accent {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-}
-.btn-accent:hover { background: var(--color-primary-focus); }
+.btn:active { transform: scale(0.98); } /* tactile press */
+.btn-primary { background: var(--color-primary); color: var(--color-on-primary); }
+/* light mode: hover darkens the lavender (#4b55c0) so white text rises to 6.2:1 */
+.btn-primary:hover { background: var(--color-primary-hover); color: var(--color-on-primary); }
+.btn-primary:active { background: var(--color-primary-focus); }
 
-/* button-secondary-pill: the ghost pill */
-.btn-ghost {
-  background: transparent;
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+.btn-secondary {
+  background: var(--color-surface-1);
+  border-color: var(--color-hairline);
+  color: var(--color-ink);
 }
-.btn-ghost:hover { background: var(--color-primary); color: var(--color-on-primary); }
+.btn-secondary:hover { background: var(--color-surface-2); border-color: var(--color-hairline-strong); }
 
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* status-badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--rounded-pill);
+  background: var(--color-surface-2);
+  color: var(--color-ink-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
+.status-badge-success { color: var(--color-semantic-success); }
 
 /* =========================================================
-   Header — the slim black global nav (44px)
+   top-nav — 56px canvas bar, one line at desktop
    ========================================================= */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  color: var(--color-on-dark);
+  background: var(--color-canvas);
+  border-bottom: 1px solid var(--color-hairline);
 }
 .header-inner {
   max-width: var(--container);
+  height: 56px;
   margin: 0 auto;
-  min-height: 44px;
   padding: 0 var(--gutter);
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: var(--spacing-xl);
 }
 .wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.06em;
+  gap: var(--spacing-xs);
+  /* eyebrow: 13px / 500 / +0.4px, the token for tracked caps labels */
+  font-family: var(--font-text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.4px;
   text-decoration: none;
-  color: var(--color-on-dark);
+  color: var(--color-ink);
 }
-.wordmark-mark { width: 18px; height: 18px; }
+.wordmark-mark { color: var(--color-primary); } /* brand mark: a documented lavender use */
+/* hover deepens the mark to the darker lavender: more contrast, not less */
+.wordmark:hover .wordmark-mark { color: var(--color-primary-hover); }
 
-.main-nav {
-  display: none;
-  gap: 2.25rem;
-  margin: 0 auto;
-  font-size: 12px;
-  letter-spacing: -0.01em;
-}
-.main-nav a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.8);
-  transition: color var(--dur-fast) var(--ease-out);
-}
-.main-nav a:hover { color: var(--color-on-dark); }
+.main-nav { display: none; gap: var(--spacing-lg); font-size: 14px; }
+.main-nav a { color: var(--color-ink-subtle); text-decoration: none; }
+.main-nav a:hover { color: var(--color-ink); }
 
-/* The sub-nav "Buy" pill, scaled to the global nav. */
-.header-cta {
-  display: none;
-  min-height: 28px;
-  padding: 4px 12px;
-  font-size: 12px;
-}
+.header-cta { display: none; margin-left: auto; }
 
 .nav-toggle {
   margin-left: auto;
@@ -272,35 +285,33 @@ p { color: var(--color-ink-secondary); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  background: transparent;
-  border: 0;
+  gap: var(--spacing-xxs);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-md);
   cursor: pointer;
 }
-.nav-toggle span {
-  display: block;
-  width: 17px; height: 1.2px;
-  background: var(--color-on-dark);
-}
+.nav-toggle span { display: block; width: 16px; height: 1px; background: var(--color-ink-muted); }
 
 .mobile-nav {
   display: flex;
   flex-direction: column;
-  padding: 0.5rem var(--gutter) 1.5rem;
-  background: var(--color-black);
+  padding: 0 var(--gutter) var(--spacing-lg);
+  background: var(--color-canvas);
 }
 /* :not(.btn) keeps this from overriding the CTA button's own text color. */
 .mobile-nav a:not(.btn) {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-hairline);
+  color: var(--color-ink-muted);
+  font-size: 16px;
   text-decoration: none;
-  color: var(--color-on-dark);
-  font-size: 1.3125rem;
-  font-weight: 600;
-  padding: 0.6rem 0;
 }
-.mobile-nav .btn { align-self: flex-start; margin-top: 1rem; }
+.mobile-nav a:not(.btn):hover { color: var(--color-ink); }
+.mobile-nav .btn { margin-top: var(--spacing-md); min-height: 44px; }
 .mobile-nav[hidden] { display: none; }
 
-@media (min-width: 834px) {
+@media (min-width: 768px) {
   .main-nav { display: flex; }
   .header-cta { display: inline-flex; }
   .nav-toggle { display: none; }
@@ -308,318 +319,294 @@ p { color: var(--color-ink-secondary); }
 }
 
 /* =========================================================
-   Hero — product-tile-light: centered name → tagline → two
-   pills → the rotor render resting on the surface
+   Photo tiles — product photography is shot on white; on the white
+   canvas a hairline border keeps the tile edge visible.
    ========================================================= */
-.hero {
-  background: var(--color-canvas);
-  padding: clamp(3.5rem, 8vw, 5.5rem) 0 var(--section);
+.photo-tile {
+  overflow: hidden;
+  background: var(--color-inverse-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-xl);
 }
-.hero-inner {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: clamp(2.5rem, 6vw, 3.5rem);
-}
-.hero-copy { display: flex; flex-direction: column; align-items: center; }
-.hero-lede {
-  margin-top: 1rem;
-  font-size: clamp(1.1875rem, 1rem + 0.9vw, 1.75rem); /* lead 28px */
-  line-height: 1.25;
-  color: var(--color-ink);
-  max-width: 30ch;
-}
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.75rem;
-}
-.hero-footnote {
-  margin-top: 1.5rem;
-  font-size: 14px;
-  line-height: 1.43;
-  max-width: 44ch;
-}
+.photo-tile img { width: 100%; height: auto; }
 
-.hero-figure { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
-/* The one product shadow: the rotor is the "render" resting on the tile. */
-.rotor-diagram {
-  width: min(100%, 420px);
-  color: var(--color-ink);
-  filter: drop-shadow(var(--shadow-product));
-}
-.rotor-caption {
-  font-size: 14px;
-  color: var(--color-ink-secondary);
-}
-.pending-value { color: var(--color-ink-secondary); }
-
-.rotor-baseplate { fill: var(--color-parchment); stroke: none; }
-.dim-circle { fill: none; stroke: var(--color-field-border); stroke-width: 1; stroke-dasharray: 2 4; }
-.rotor-ring { fill: var(--color-canvas); stroke: var(--color-ink); stroke-width: 1.4; }
-.rotor-ring-inner { fill: none; stroke: var(--color-ink-secondary); }
-.rotor-slots circle { fill: var(--color-parchment); stroke: var(--color-ink); stroke-width: 1.2; }
-.rotor-hub { fill: var(--color-ink); }
-.dim-line line { stroke: var(--color-ink-secondary); stroke-width: 1; }
-
-.rotor-spin {
-  transform-origin: 210px 210px;
-  animation: rotor-rotate 22s linear infinite;
-}
-@keyframes rotor-rotate {
-  to { transform: rotate(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rotor-spin { animation: none; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
 
 /* =========================================================
-   Principles — parchment tile of white utility cards
+   Hero — product rotation inside one inset panel (R20 structure):
+   big product name, two-line tagline, one CTA, photo on the right.
    ========================================================= */
-.principles { background: var(--color-parchment); padding: var(--section) 0; }
-.principles h2 { margin-bottom: clamp(2rem, 5vw, 3rem); }
-
-.spine {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  counter-reset: principle;
+.hero { padding: var(--spacing-lg) 0 var(--section-space); }
+.hero-stage {
+  position: relative;
+  padding: var(--spacing-lg);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-xl);
+  box-shadow: var(--edge-highlight);
 }
-@media (min-width: 640px) {
-  .spine { grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 768px) { .hero-stage { padding: var(--spacing-xxl); } }
+.slide { display: grid; grid-template-columns: 1fr; gap: var(--spacing-xl); align-items: center; }
+.slide[hidden] { display: none; }
+@media (min-width: 1024px) {
+  .slide { grid-template-columns: 5fr 7fr; gap: var(--spacing-xxl); min-height: 440px; }
 }
-@media (min-width: 1068px) {
-  .spine { grid-template-columns: repeat(4, 1fr); }
-}
-.spine-line { display: none; }
-
-.spine-item {
-  counter-increment: principle;
-  background: var(--color-canvas);
-  border-radius: var(--radius-lg);
-  padding: 28px 24px 32px;
-}
-.spine-tick {
-  display: block;
-  margin-bottom: 1.75rem;
-  font-size: 14px;
+/* display-xl: the product name is the headline, as in the reference */
+.slide-name {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 80px);
   font-weight: 600;
-  color: var(--color-ink-secondary);
+  line-height: 1.05;
+  letter-spacing: -0.0375em;
 }
-.spine-tick::before { content: "0" counter(principle); }
-.spine-item h3 { margin-bottom: 0.6rem; }
-.spine-item p { font-size: 15px; line-height: 1.47; }
-
-/* =========================================================
-   Spec table — white tile, hairline rows, centered column
-   ========================================================= */
-.specs { background: var(--color-canvas); padding: var(--section) 0; }
-
-.spec-table {
-  margin: clamp(2rem, 5vw, 3rem) auto 0;
-  width: 100%;
-  max-width: 760px;
-  border-collapse: collapse;
-}
-.spec-table tr { border-bottom: 1px solid var(--color-hairline); }
-.spec-table th, .spec-table td {
-  text-align: left;
-  padding: 18px 0;
-  vertical-align: top;
-}
-.spec-table th {
-  width: 40%;
-  padding-right: 1.5rem;
+/* headline */
+.slide-tagline {
+  margin-top: var(--spacing-md);
+  font-size: 28px;
   font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.6px;
   color: var(--color-ink);
+  text-wrap: balance;
 }
-.spec-table td { font-weight: 400; color: var(--color-ink); }
+.slide-lede { margin: var(--spacing-md) 0 var(--spacing-xl); color: var(--color-ink-subtle); max-width: 30em; }
+.slide-media { align-self: stretch; display: flex; align-items: center; }
 
-/* =========================================================
-   Workflow — product-tile-dark
-   ========================================================= */
-.workflow { background: var(--color-tile-1); color: var(--color-on-dark); padding: var(--section) 0; }
-.workflow p { color: var(--color-body-muted); }
-
-.workflow-diagram {
-  margin-top: clamp(2rem, 5vw, 3rem);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  counter-reset: step;
-}
-@media (min-width: 640px) {
-  .workflow-diagram { grid-template-columns: repeat(2, 1fr); }
-}
-@media (min-width: 1068px) {
-  .workflow-diagram { grid-template-columns: repeat(4, 1fr); }
-}
-.workflow-step {
-  counter-increment: step;
-  background: var(--color-tile-3);
-  border: 1px solid transparent;
-  border-radius: var(--radius-lg);
-  padding: 28px 24px 32px;
-}
-.workflow-step-active {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-}
-.workflow-step-active p { color: var(--color-ink-secondary); }
-.workflow-dot {
-  display: block;
-  margin-bottom: 1.75rem;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-body-muted);
-}
-.workflow-step-active .workflow-dot { color: var(--color-ink-secondary); }
-.workflow-dot::before { content: "STEP 0" counter(step); }
-.workflow-step h3 {
+.carousel-controls {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.6rem;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
 }
-.workflow-tag {
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: 0;
-  color: var(--color-ink);
-  background: var(--color-parchment);
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
+.carousel-arrow, .carousel-pause {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-md);
+  color: var(--color-ink-muted);
+  cursor: pointer;
 }
-.workflow-step p { font-size: 15px; }
+.carousel-arrow:hover, .carousel-pause:hover { border-color: var(--color-hairline-tertiary); color: var(--color-ink); }
+.carousel-dots { display: flex; gap: var(--spacing-xs); }
+/* progress bars (R20): the active bar fills over the autoplay interval */
+.carousel-dot {
+  position: relative;
+  width: 64px; height: 24px;
+  padding: 0; background: none; border: 0; cursor: pointer;
+}
+.carousel-dot::before, .dot-fill {
+  content: ""; position: absolute; left: 0; right: 0; top: 11px; height: 2px; border-radius: var(--rounded-pill);
+}
+.carousel-dot::before { background: var(--color-hairline-strong); }
+.dot-fill { background: var(--color-ink); transform: scaleX(0); transform-origin: left; }
+.carousel-dot[aria-current="true"] .dot-fill { transform: scaleX(1); }
+.carousel-pause .icon-play { display: none; }
+.carousel-pause[aria-pressed="true"] .icon-play { display: block; }
+.carousel-pause[aria-pressed="true"] .icon-pause { display: none; }
 
 /* =========================================================
-   Certifications — dark tile, a micro-step off the one above
+   Sections
    ========================================================= */
-.certifications {
-  background: var(--color-tile-3);
-  color: var(--color-on-dark);
-  padding: var(--section) 0;
-  border-top: 1px solid var(--color-hairline-on-dark);
+.section { padding: var(--section-space) 0; border-top: 1px solid var(--color-hairline); }
+.footnote { margin-top: var(--spacing-md); font-size: 12px; line-height: 1.4; color: var(--color-ink-subtle); }
+
+/* --- Shared: one statement (Miracell), three shared technologies --- */
+.statement {
+  font-size: clamp(28px, 3.2vw, 40px);
+  color: var(--color-ink-subtle);
+  max-width: 22em;
 }
-.cert-panel {
-  margin: clamp(1.5rem, 4vw, 2rem) auto 0;
-  max-width: 40rem;
-  text-align: center;
+.statement em { font-style: normal; color: var(--color-ink); }
+.shared-list { display: grid; grid-template-columns: 1fr; gap: var(--spacing-xl); margin-top: var(--spacing-xxl); }
+@media (min-width: 768px) { .shared-list { grid-template-columns: repeat(3, 1fr); } }
+.shared-list li { padding-top: var(--spacing-lg); border-top: 1px solid var(--color-hairline-strong); }
+.shared-list p { margin-top: var(--spacing-xs); font-size: 14px; color: var(--color-ink-subtle); max-width: 30em; }
+
+/* --- Compare: two products side by side, number rows (Miracell) --- */
+.compare { display: grid; grid-template-columns: 1fr; gap: var(--spacing-sm); }
+@media (min-width: 768px) { .compare { grid-template-columns: 1fr 1fr; } }
+.compare-col {
+  display: flex; flex-direction: column; gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--edge-highlight);
 }
-.cert-panel p { color: var(--color-body-muted); margin: 0 auto; }
-.cert-panel p:first-child {
-  color: var(--color-on-dark);
-  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.3125rem);
-  line-height: 1.38;
+.compare-photo { border-radius: var(--rounded-md); aspect-ratio: 3 / 2; }
+.compare-photo img { height: 100%; object-fit: contain; }
+.compare-col h3 { font-size: 28px; font-weight: 600; letter-spacing: -0.6px; } /* headline */
+.compare-sub { font-size: 14px; color: var(--color-ink-subtle); }
+.num-list { display: grid; }
+.num-list > div {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--color-hairline);
 }
-.cert-note { margin-top: 1.25rem; font-size: 14px; max-width: 46ch; }
+.num-list dt { font-size: 14px; color: var(--color-ink-subtle); }
+.num-list dd { text-align: right; }
+.num { font-size: 28px; font-weight: 600; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; } /* headline */
+.num-text { font-size: 22px; font-weight: 500; letter-spacing: -0.4px; } /* card-title */
+.unit { font-size: 14px; color: var(--color-ink-subtle); }
+.compare-col .btn { align-self: flex-start; margin-top: auto; }
+
+/* --- Product detail: pill tabs (DESIGN.md pricing-tab spec) --- */
+.tabs { display: inline-flex; gap: var(--spacing-xxs); padding: var(--spacing-xxs); border: 1px solid var(--color-hairline); border-radius: var(--rounded-pill); }
+.tab {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--rounded-pill);
+  background: var(--color-canvas);
+  color: var(--color-ink-subtle);
+  font-size: 14px; font-weight: 500; line-height: 1.2;
+  cursor: pointer;
+}
+.tab:hover { color: var(--color-ink); }
+.tab[aria-selected="true"] { background: var(--color-surface-2); color: var(--color-ink); }
+.tab-panel { margin-top: var(--spacing-xxl); }
+.tab-panel[hidden] { display: none; }
+
+.detail-grid { display: grid; grid-template-columns: 1fr; gap: var(--spacing-xl); align-items: center; }
+@media (min-width: 1024px) { .detail-grid { grid-template-columns: 6fr 5fr; gap: var(--spacing-xxl); } }
+.detail-kicker { font-size: 13px; font-weight: 500; line-height: 1.3; letter-spacing: 0.4px; color: var(--color-ink-subtle); } /* eyebrow */
+.detail-title { margin: var(--spacing-sm) 0 var(--spacing-md); font-size: 28px; font-weight: 600; letter-spacing: -0.6px; } /* headline */
+.detail-intro > p:not(.detail-kicker) { color: var(--color-ink-subtle); max-width: 36em; }
+.detail-photo { border-radius: var(--rounded-lg); }
+
+.circuit { display: grid; grid-template-columns: 1fr; gap: var(--spacing-xs); margin-top: var(--spacing-xl); }
+@media (min-width: 640px) { .circuit { grid-template-columns: repeat(3, 1fr); } }
+.circuit li {
+  display: flex; flex-direction: column; gap: var(--spacing-xxs);
+  padding: var(--spacing-md);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-md);
+}
+.circuit-step { font-size: 14px; color: var(--color-ink-subtle); }
+.circuit-value { font-size: 20px; line-height: 1.4; letter-spacing: -0.2px; color: var(--color-ink); font-variant-numeric: tabular-nums; } /* subhead */
+
+.steps-title { margin-top: var(--spacing-xxl); font-size: 22px; font-weight: 500; letter-spacing: -0.4px; } /* card-title */
+.step-row { display: grid; grid-template-columns: 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-lg); }
+@media (min-width: 640px) { .step-row { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .step-row { grid-template-columns: repeat(3, 1fr); } }
+.step-row li { padding: var(--spacing-lg); border: 1px solid var(--color-hairline); border-radius: var(--rounded-lg); }
+.step-row .step-auto { background: var(--color-surface-1); box-shadow: var(--edge-highlight); }
+.step-row h5 { font-size: 18px; font-weight: 400; line-height: 1.5; letter-spacing: -0.1px; color: var(--color-ink); margin: 0; } /* body-lg */
+.step-row p { margin-top: var(--spacing-xxs); font-size: 14px; color: var(--color-ink-subtle); }
+
+.spec-groups {
+  display: grid; grid-template-columns: 1fr; gap: var(--spacing-xxl);
+  margin-top: var(--spacing-xxl); padding-top: var(--spacing-xxl);
+  border-top: 1px solid var(--color-hairline);
+}
+@media (min-width: 768px) { .spec-groups { grid-template-columns: 1fr 1fr; } }
+.spec-group h4 { margin-bottom: var(--spacing-md); font-size: 22px; font-weight: 500; letter-spacing: -0.4px; } /* card-title */
+.spec-group dl { display: grid; gap: var(--spacing-sm); }
+.spec-group dl > div { display: grid; grid-template-columns: 9em 1fr; gap: var(--spacing-md); font-size: 14px; }
+.spec-group dt { color: var(--color-ink-subtle); }
+.spec-group dd { color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.spec-group dd.pending-value { color: var(--color-ink-subtle); }
+
+/* --- Documents: three resource cards (OmniTom) --- */
+.doc-cards { display: grid; grid-template-columns: 1fr; gap: var(--spacing-sm); }
+@media (min-width: 768px) { .doc-cards { grid-template-columns: repeat(3, 1fr); } }
+.doc-card {
+  display: flex; flex-direction: column; gap: var(--spacing-xs);
+  min-height: 200px;
+  padding: var(--spacing-lg);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--edge-highlight);
+}
+.doc-card p { font-size: 14px; color: var(--color-ink-subtle); }
+.doc-card .btn { align-self: flex-start; margin-top: auto; }
+.doc-card-lifted { background: var(--color-surface-2); border-color: var(--color-hairline-strong); }
 
 /* =========================================================
-   Contact — white tile; form fields in 11px capsules
+   Contact — banner with contact details and the form
    ========================================================= */
-.contact { background: var(--color-canvas); padding: var(--section) 0; }
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(2.5rem, 5vw, 4rem);
-  align-items: start;
+.cta-banner {
+  display: grid; grid-template-columns: 1fr; gap: var(--spacing-xxl);
+  padding: var(--spacing-lg);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--edge-highlight);
 }
-@media (min-width: 900px) {
-  .contact-grid { grid-template-columns: 0.9fr 1.1fr; }
-}
-.contact-intro p { margin-top: 1rem; max-width: 40ch; }
-.contact-detail { margin-top: 1.5rem; font-size: 14px; }
+@media (min-width: 768px) { .cta-banner { padding: var(--spacing-xxl); } }
+@media (min-width: 1024px) { .cta-banner { grid-template-columns: 5fr 7fr; } }
+.cta-copy h2 { font-size: clamp(28px, 3.2vw, 40px); }
+.cta-copy > p { margin-top: var(--spacing-md); color: var(--color-ink-subtle); max-width: 28em; }
+.contact-list { display: grid; gap: var(--spacing-sm); margin-top: var(--spacing-xl); }
+.contact-list > div { display: grid; grid-template-columns: 5em 1fr; gap: var(--spacing-md); }
+.contact-list dt { font-size: 14px; color: var(--color-ink-subtle); }
+.contact-list dd { color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.contact-list a { text-decoration: none; }
+.contact-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background: var(--color-parchment);
-  border-radius: var(--radius-lg);
-  padding: clamp(1.5rem, 4vw, 2rem);
+.contact-form { display: grid; grid-template-columns: 1fr; gap: var(--spacing-md); align-content: start; }
+@media (min-width: 640px) {
+  .contact-form { grid-template-columns: 1fr 1fr; }
+  .form-row-full { grid-column: 1 / -1; }
 }
-.form-row { display: flex; flex-direction: column; gap: 0.4rem; }
-.form-row-split { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-@media (min-width: 480px) {
-  .form-row-split { grid-template-columns: 1fr 1fr; }
-}
-.form-row-split > div { display: flex; flex-direction: column; gap: 0.4rem; }
-label { font-size: 14px; font-weight: 600; color: var(--color-ink); }
-input, textarea {
+.form-row { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+label { font-size: 14px; font-weight: 500; color: var(--color-ink-muted); }
+/* text-input; select gets explicit colors so native dropdowns match */
+input, textarea, select {
   min-height: 44px;
-  border: 1px solid var(--color-field-border);
-  border-radius: var(--radius-md);
-  padding: 10px 14px;
-  background: var(--color-canvas);
-  font-size: 17px;
-  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  padding: 8px 12px;
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--rounded-md);
+  font: inherit; font-size: 16px; line-height: 1.5;
+  color: var(--color-ink);
 }
-input:focus, textarea:focus {
-  outline: none;
+select option { background-color: var(--color-surface-1); color: var(--color-ink); }
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 0;
   border-color: var(--color-primary-focus);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-focus) 30%, transparent);
 }
-/* Never flag an untouched required field as an error. Only mark it once the
-   visitor has interacted with it (:user-invalid, where supported) or after
-   a submit attempt has run validation (.was-validated, set by main.js). */
-input:user-invalid, textarea:user-invalid { border-color: var(--color-error); }
-.contact-form.was-validated input:invalid,
-.contact-form.was-validated textarea:invalid { border-color: var(--color-error); }
-textarea { resize: vertical; min-height: 6.5rem; }
-.form-submit { margin-top: 0.5rem; align-self: flex-start; }
-.form-status { font-size: 14px; min-height: 1.2em; }
-.form-status[data-state="success"] { color: var(--color-success); }
-.form-status[data-state="error"] { color: var(--color-error); }
+textarea { resize: vertical; min-height: 96px; }
+.field-error { display: none; font-size: 12px; line-height: 1.4; color: var(--color-ink); }
+input:user-invalid,
+.contact-form.was-validated input:invalid { border-color: var(--color-ink); }
+input:user-invalid + .field-error,
+.contact-form.was-validated input:invalid + .field-error { display: block; }
+.form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-md); }
+.form-status { font-size: 14px; color: var(--color-ink-subtle); }
+.form-status[data-state="success"] { color: var(--color-semantic-success); }
 
 /* =========================================================
-   Footer — parchment, dense and quiet
+   footer
    ========================================================= */
-.site-footer { background: var(--color-parchment); padding: 2.5rem 0 3rem; color: var(--color-ink-muted-80); }
-.footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--color-field-border);
-}
-.wordmark-footer { font-weight: 600; font-size: 14px; letter-spacing: 0.06em; color: var(--color-ink); }
-.footer-tagline { margin-top: 0.35rem; font-size: 12px; }
-.footer-meta { font-size: 12px; color: var(--color-ink-secondary); }
+.site-footer { padding: 64px 0; border-top: 1px solid var(--color-hairline); font-size: 12px; line-height: 1.4; color: var(--color-ink-subtle); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--spacing-lg); }
+.wordmark-footer { font-size: 13px; font-weight: 500; line-height: 1.3; letter-spacing: 0.4px; color: var(--color-ink); } /* eyebrow */
+.footer-tagline { margin-top: var(--spacing-xxs); }
+.footer-meta { text-align: right; }
 
 /* =========================================================
-   Scroll-reveal (JS adds .js-reveal, then .is-visible)
-   Content is visible by default; JS opts a root into the
-   hide-then-reveal treatment only once it is actually running,
-   so a script failure never leaves content hidden.
+   Motion: one job each. The slide fades in when it changes; the
+   active progress bar fills over the autoplay interval (7s).
+   Off under prefers-reduced-motion (autoplay is also off in JS).
    ========================================================= */
-[data-reveal-root].js-reveal .spine-item,
-[data-reveal-root].js-reveal .workflow-step {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out);
+@media (prefers-reduced-motion: no-preference) {
+  .slide.is-active { animation: slide-in 500ms var(--ease-out) both; }
+  /* only while actually advancing; when held or paused the current bar
+     simply shows full, so the active product stays obvious */
+  .hero-stage.is-playing:not(.is-paused) .carousel-dot[aria-current="true"] .dot-fill { animation: dot-fill 7s linear both; }
 }
-[data-reveal-root].js-reveal.is-visible .spine-item,
-[data-reveal-root].js-reveal.is-visible .workflow-step { opacity: 1; transform: none; }
-[data-reveal-root] > :nth-child(2 of .spine-item, .workflow-step) { transition-delay: 60ms; }
-[data-reveal-root] > :nth-child(3 of .spine-item, .workflow-step) { transition-delay: 120ms; }
-[data-reveal-root] > :nth-child(4 of .spine-item, .workflow-step) { transition-delay: 180ms; }
+@keyframes slide-in { from { opacity: 0; transform: translateY(var(--spacing-xs)); } to { opacity: 1; transform: none; } }
+@keyframes dot-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn:active { transform: none; }
-  .spine-item, .workflow-step {
-    transition: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
 }
